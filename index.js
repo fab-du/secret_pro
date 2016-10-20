@@ -1,6 +1,7 @@
 
 const GITHUB_API_LINK = "https://api.github.com"
 const GITHUB_API_LINK_SEARCH = "https://api.github.com/search/users?q=location:${cityname}" 
+const TOKEN = "b2c307d105281fa3d9a717aca4dd0e6cacc6fa6d";
 
 var Client = require('node-rest-client').Client;
  
@@ -62,7 +63,7 @@ function search_user_in_city( cityname, cb ){
 function search_js_repos_for_user( username,cb ){
 	let client = new Client();
 	var args = {
-		headers: { "Content-Type": "application/json", "Accept": "application/vnd.github.v3+json", "User-Agent" : "RANKING-APP"}
+		headers: {"Content-Type": "application/json", "Accept": "application/vnd.github.v3+json", "User-Agent" : "RANKING-APP"}
 	};
 	client.get("https://api.github.com/search/repositories?q=language:javascript+user:" + username, args, ( data, res ) =>{
 		try {

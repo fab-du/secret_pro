@@ -9,6 +9,9 @@
   "author": "Siyapdje, Fabrice Dufils",
   "license": "ISC",
   "dependencies": {
+    "commander": "^2.9.0",
+    "github": "^5.2.2",
+    "node-github": "0.0.3",
     "node-rest-client": "^2.0.1"
   }
 }
