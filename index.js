@@ -39,19 +39,20 @@ function search_user_in_city( cityname, cb ){
 	
 }
 
-function search_js_repos_for_user( username ){
+function search_js_repos_for_user( username,cb ){
 	let client = new Client();
 	var args = {
 		headers: { "Content-Type": "application/json", "Accept": "application/vnd.github.v3+json", "User-Agent" : "RANKING-APP"}
 	};
 	client.get("https://api.github.com/search/repositories?q=language:javascript+user:" + username, args, ( data, res ) =>{
 		try {
-			console.log( "======" );
-			var repos = data.items;
-			if (repos !== undefined)
+			if ( typeof data !== undefined && data["total_count"] >0 )
 			{
-				let stars = count_stars( repos, username );
-				log( stars );
+				let repos = data.items;
+				let user_stars = count_stars( repos, username );
+				if ( user_stars['stars'] > 0 ){
+					cb( user_stars )
+				}
 			}
 		} catch (e) {
 			log( e );
@@ -75,9 +76,11 @@ function count_stars( repos, username ){
 	}
 }
 
-search_user_in_city( cityname, ( result) => {
-	result.map( ( username ) =>{
-		search_js_repos_for_user( username );
+search_user_in_city( cityname, ( usernames) => {
+	usernames.map( ( username ) =>{
+		search_js_repos_for_user( username, ( user_stars )=>{
+			log( user_stars );
+		});
 	});
 });
 
