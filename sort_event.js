@@ -5,20 +5,24 @@ const sortEvent = new SortEvent();
 
 var max = 0;
 var users = [];
+var _counter=0;
 
 sortEvent.on("event", (user_and_star)=>{
 	users.push(user_and_star);
-	users.sort( ( prev, curr )=>{
+	users=users.sort( ( prev, curr )=>{
 		return curr['stars'] - prev['stars'];
 	});
+	++_counter;
 
-	if( max === 30 )
+	if( max === _counter ){
+		console.log(users);
 		console.log(users[0], users[1], users[2]);
+	}
 });
 
 sortEvent.on("max", (max_users)=>{
 	max = max_users;
-})
+});
 
 
 module.exports = sortEvent;

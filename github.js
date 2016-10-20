@@ -1,11 +1,10 @@
-
 var sort_event = require("./sort_event");
 var Client     = require("github");
 var github     = new Client();
 
 github.authenticate({
 	    type: "oauth",
-	    token: "c7542d1c41ba5059ff45733ae56276538318a02a"
+	    token: "c6998c4432212b71aa8c135b6e4401079ba4fbd6"
 });
 
 function Github(){}
@@ -21,7 +20,7 @@ return new Promise( (resolve, reject)=>{
 		   let usernames = _users.map( (user) =>{
 			   return user["login"];
 		   })
-		  sort_event.emit("max" )
+		  sort_event.emit("max", usernames.length )
 		  resolve( usernames );
 			
 		} catch (e) {
@@ -30,7 +29,6 @@ return new Promise( (resolve, reject)=>{
 	   });
 });
 }
-
 
 
 function get_user_repos ( username, cb ){
@@ -45,7 +43,7 @@ function get_user_repos ( username, cb ){
 	   } catch (e) {
 		   
 	   }
-		cb( [] );
+		cb([]);
 	})
 
 };
@@ -53,10 +51,9 @@ function get_user_repos ( username, cb ){
 Github.prototype.get_stars = function( usernames ){
 
 	usernames.map((username)=>{
-		console.log(username)
 		get_user_repos( username, function(repos){
 			var user_stars = count_stars( repos, username );
-			sort_event.emit( "event",  user_stars);
+			sort_event.emit("event",  user_stars);
 		})
 	})
 }
