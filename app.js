@@ -1,14 +1,10 @@
-var github = require("./github.js")
-var path =  require("path")
+var github = require("./github.js");
+var utils  = require("./utils");
 
-
-var utils = require("./utils");
-
-var stdin = process.argv.toString();
-var city = utils.parser( stdin );
+var stdin  = process.argv.toString();
+var city   = utils.parser( stdin );
 
 github.search_by_city(city)
-.then( (users) =>{
-	console.log( github )
-	github.get_stars( users );
-})
+.then((users)=>{
+	github.get_stars(users);
+});

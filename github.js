@@ -1,6 +1,8 @@
-var sort_event = require("./sort_event");
-var Client     = require("github");
+'use strict';
+var sort_event = require('./sort_event');
+var Client     = require('github');
 var github     = new Client();
+var utils      = require('./utils.js');
 
 github.authenticate({
 	    type: "oauth",
@@ -9,26 +11,27 @@ github.authenticate({
 
 function Github(){}
 
-Github.prototype.search_by_city = function( city ){
-return new Promise( (resolve, reject)=>{
+Github.prototype.search_by_city = function search_by_city( city ){
+return new Promise((resolve )=>{
 	let _q = "location:" + city;
 	github.search.users({
 		q: _q
 	}, function(err, res){
+		utils.check_cb_error( err, "Github API Issue" );
 		try {
 		   var _users = res['items'];
-		   let usernames = _users.map( (user) =>{
+		   let usernames = _users.map((user)=>{
 			   return user["login"];
-		   })
-		  sort_event.emit("max", usernames.length )
-		  resolve( usernames );
+		   });
+		  sort_event.emit("max", usernames.length);
+		  resolve(usernames);
 			
 		} catch (e) {
-			resolve([])
+			utils.error(e.toString());
 		}
 	   });
 });
-}
+};
 
 
 function get_user_repos ( username, cb ){
@@ -37,26 +40,27 @@ function get_user_repos ( username, cb ){
 		q: _q
 	}, 
 	function(err, res){
+	   utils.check_cb_err( err, "Github API Issue." );
 	   try {
 		   var repos = res['items'];
 		   cb(repos);
 	   } catch (e) {
-		   
+		utils.error(e.toString());
 	   }
-		cb([]);
-	})
+	cb([]);
+	});
 
-};
+}
 
-Github.prototype.get_stars = function( usernames ){
+Github.prototype.get_stars = function get_stars( usernames ){
 
 	usernames.map((username)=>{
 		get_user_repos( username, function(repos){
 			var user_stars = count_stars( repos, username );
 			sort_event.emit("event",  user_stars);
-		})
-	})
-}
+		});
+	});
+};
 
 
 function count_stars( repos, username ){
@@ -65,7 +69,7 @@ function count_stars( repos, username ){
 	});
 
 	if (repos !== undefined && repos.length > 0){
-		let total_stars =  stars.reduce(( prev, curr ) =>{
+		let total_stars = stars.reduce((prev, curr)=>{
 			return prev + curr;
 		});
 		return { user : username, stars : total_stars  };
@@ -73,6 +77,6 @@ function count_stars( repos, username ){
 	else{
 		return { user : username, stars : 0  };
 	}
-};
+}
 
 module.exports = new Github();
