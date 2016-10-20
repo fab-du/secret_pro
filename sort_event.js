@@ -1,4 +1,5 @@
 var EventEmitter = require('events');
+var print_event = require('./print_event');
 
 class SortEvent extends EventEmitter {}
 const sortEvent = new SortEvent();
@@ -6,6 +7,8 @@ const sortEvent = new SortEvent();
 var max = 0;
 var users = [];
 var _counter=0;
+
+const RANG=2
 
 sortEvent.on("event", (user_and_star)=>{
 	users.push(user_and_star);
@@ -15,8 +18,7 @@ sortEvent.on("event", (user_and_star)=>{
 	++_counter;
 
 	if( max === _counter ){
-		console.log(users);
-		console.log(users[0], users[1], users[2]);
+		print_event.emit("print", users.slice(0, RANG));
 	}
 });
 

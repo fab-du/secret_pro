@@ -4,7 +4,7 @@ var github     = new Client();
 
 github.authenticate({
 	    type: "oauth",
-	    token: "c6998c4432212b71aa8c135b6e4401079ba4fbd6"
+	    token: "2b9ead0df5db77ac41ab8df55ff4d6caa9f2a72f"
 });
 
 function Github(){}
