@@ -4,16 +4,16 @@
   "description": "Top Dev In the Area",
   "main": "index.js",
   "scripts": {
-		"linter": "./node_modules/jshint/bin/jshint ",
+    "lint": "./node_modules/jshint/bin/jshint ./*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Siyapdje, Fabrice Dufils",
   "license": "ISC",
   "dependencies": {
-    "github": "^5.2.2",
-    "node-rest-client": "^2.0.1"
+    "github": "^5.2.2"
   },
   "devDependencies": {
-    "jshint": "^2.9.3"
+    "jshint": "^2.9.3",
+    "jslint": "^0.10.3"
   }
 }
