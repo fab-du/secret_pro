@@ -2,18 +2,17 @@
 const GITHUB_API_LINK = "https://api.github.com"
 const GITHUB_API_LINK_SEARCH = "https://api.github.com/search/users?q=location:${cityname}" 
 
-
 var Client = require('node-rest-client').Client;
  
-var client = new Client();
 
-
+var log = console.log
 
 var cityname = process.argv[2]
 var pwd = process.cwd()
 
 
 function search_user_in_city( cityname, cb ){
+	let client = new Client();
 	let _searchQuery =   GITHUB_API_LINK_SEARCH + cityname;
 
 	var args = {
@@ -21,19 +20,65 @@ function search_user_in_city( cityname, cb ){
 	};
 
 	client.get( "https://api.github.com/search/users?q=location:" + cityname + "+language:javascript", args,  ( data, res ) =>{
-		let usernames = data.items.map( (el) => {
-			return el['login'];
-		});
-		cb( usernames ) 
+		try {
+			var _users = data['items']
+
+			if( _users !== undefined ){
+				let usernames = _users.map( (el) => {
+					return el['login'];
+				});
+				cb( usernames ) 
+			}
+			cb([]);
+			
+		} catch (e) {
+			console.log( e );
+			/* handle error */
+		}
 	});
 	
 }
 
+function search_js_repos_for_user( username ){
+	let client = new Client();
+	var args = {
+		headers: { "Content-Type": "application/json", "Accept": "application/vnd.github.v3+json", "User-Agent" : "RANKING-APP"}
+	};
+	client.get("https://api.github.com/search/repositories?q=language:javascript+user:" + username, args, ( data, res ) =>{
+		try {
+			console.log( "======" );
+			var repos = data.items;
+			if (repos !== undefined)
+			{
+				let stars = count_stars( repos, username );
+				log( stars );
+			}
+		} catch (e) {
+			log( e );
+		}
+	})
+}
 
+function count_stars( repos, username ){
+	let stars = repos.map( (repo) =>{
+		return repo['stargazers_count'];
+	});
+
+	if (repos !== undefined && repos.length > 0){
+		let total_stars =  stars.reduce(( prev, curr ) =>{
+			return prev + curr;
+		});
+		return { user : username, stars : total_stars  };
+	}
+	else{
+		return { user : username, stars : 0  };
+	}
+}
 
 search_user_in_city( cityname, ( result) => {
-	console.log( result )
+	result.map( ( username ) =>{
+		search_js_repos_for_user( username );
+	});
 });
-
 
 
