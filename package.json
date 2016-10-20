@@ -1,0 +1,14 @@
+{
+  "name": "topdevranking",
+  "version": "1.0.0",
+  "description": "Top Dev In the Area",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Siyapdje, Fabrice Dufils",
+  "license": "ISC",
+  "dependencies": {
+    "node-rest-client": "^2.0.1"
+  }
+}
