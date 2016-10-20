@@ -51,7 +51,9 @@ function get_user_repos ( username, cb ){
 };
 
 Github.prototype.get_stars = function( usernames ){
+
 	usernames.map((username)=>{
+		console.log(username)
 		get_user_repos( username, function(repos){
 			var user_stars = count_stars( repos, username );
 			sort_event.emit( "event",  user_stars);
