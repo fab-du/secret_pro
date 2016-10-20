@@ -1,6 +1,8 @@
-var Client = require("github");
+
 var sort_event = require("./sort_event");
-var github = new Client();
+var Client     = require("github");
+var github     = new Client();
+
 github.authenticate({
 	    type: "oauth",
 	    token: "c7542d1c41ba5059ff45733ae56276538318a02a"
