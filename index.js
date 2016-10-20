@@ -10,6 +10,26 @@ var log = console.log
 var cityname = process.argv[2]
 var pwd = process.cwd()
 
+const EventEmitter = require('events');
+
+class SortEvent extends EventEmitter {}
+class PrintEvent extends EventEmitter {}
+const printEvent = new PrintEvent();
+const sortEvent = new SortEvent();
+
+var userLists=[];
+sortEvent.on('sortevent', ( data ) => {
+	userLists.push( data );
+	userLists.sort( ( prev, curr )=>{
+		return curr['stars'] - prev['stars'];
+	});
+	console.log( userLists )
+});
+
+printEvent.on('printevent', ()=>{
+	console.log( userLists );
+});
+
 
 function search_user_in_city( cityname, cb ){
 	let client = new Client();
@@ -77,10 +97,15 @@ function count_stars( repos, username ){
 }
 
 search_user_in_city( cityname, ( usernames) => {
-	usernames.map( ( username ) =>{
-		search_js_repos_for_user( username, ( user_stars )=>{
-			log( user_stars );
-		});
+	usernames.map( ( username, i ) =>{
+		if( i < usernames.length-1 ){
+			search_js_repos_for_user( username, ( user_stars )=>{
+				sortEvent.emit( "event", user_stars );
+			});
+		}
+		else{
+			printEvent.emit("event");
+		}
 	});
 });
 
