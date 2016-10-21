@@ -8,7 +8,7 @@ const sortEvent  = new SortEvent();
 var max      = 0;
 var users    = [];
 var _counter = 0;
-const RANG   = 2;
+const RANG   = 3;
 
 sortEvent.on("event", (user_and_star)=>{
 	users.push(user_and_star);

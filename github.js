@@ -6,7 +6,7 @@ var utils      = require('./utils.js');
 
 github.authenticate({
 	    type: "oauth",
-	    token: "2b9ead0df5db77ac41ab8df55ff4d6caa9f2a72f"
+	    token: "d3fb84c3412f2a20f8ef33a58fc11019e7164305"
 });
 
 function Github(){}
@@ -18,6 +18,11 @@ return new Promise((resolve )=>{
 		q: _q
 	}, function(err, res){
 		utils.check_cb_error( err, "Github API Issue" );
+
+		if( utils.check_cb_undefined( res )){
+			utils.error("No Users In the City. \n" );
+		}
+
 		try {
 		   var _users = res['items'];
 		   let usernames = _users.map((user)=>{
@@ -27,7 +32,8 @@ return new Promise((resolve )=>{
 		  resolve(usernames);
 			
 		} catch (e) {
-			utils.error(e.toString());
+			resolve([]);
+			utils.error("From users" + e.toString());
 		}
 	   });
 });
@@ -40,14 +46,13 @@ function get_user_repos ( username, cb ){
 		q: _q
 	}, 
 	function(err, res){
-	   utils.check_cb_err( err, "Github API Issue." );
+	   utils.check_cb_error( err, "Github API Issue." );
 	   try {
 		   var repos = res['items'];
 		   cb(repos);
 	   } catch (e) {
-		utils.error(e.toString());
+		   cb([]);
 	   }
-	cb([]);
 	});
 
 }

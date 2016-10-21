@@ -14,13 +14,22 @@ parser : function parser( stdin ){
 
 	return commands[commands.length -1];
 },
+
 error : function error( error_message ){
 	errorHandler.emit("error", error_message );
 },
-check_cb_error : function check_cb_error( err, message ){
+
+check_cb_error : function check_cb_error( err, error_message ){
 	if(err){
-		this.error( message );
+		errorHandler.emit("\n error", error_message + "\n" + err.message.message );
 	}
+},
+
+check_cb_undefined: function check_cb_undefined( data ){
+	if( typeof data === undefined ){
+		return true;
+	}
+	return false;
 }
 
 };
