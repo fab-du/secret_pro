@@ -33,7 +33,7 @@ return new Promise((resolve )=>{
 			
 		} catch (e) {
 			resolve([]);
-			utils.error("From users" + e.toString());
+			utils.error( e.toString());
 		}
 	   });
 });
@@ -47,6 +47,12 @@ function get_user_repos ( username, cb ){
 	}, 
 	function(err, res){
 	   utils.check_cb_error( err, "Github API Issue." );
+
+		 if( utils.check_cb_undefined( res )){
+			 console.log("should")
+			utils.error("No Users In the City. \n" );
+		 }
+
 	   try {
 		   var repos = res['items'];
 		   cb(repos);

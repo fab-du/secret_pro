@@ -9,7 +9,7 @@ parser : function parser( stdin ){
 	var programm_name = path.basename(__filename);
 
 	if( commands.length !== 3  ){
-		errorHandler.emit("error", "Wrong arguments. \nUse Case: node " + programm_name + " cityname");
+		return null;
 	}
 
 	return commands[commands.length -1];
@@ -26,7 +26,7 @@ check_cb_error : function check_cb_error( err, error_message ){
 },
 
 check_cb_undefined: function check_cb_undefined( data ){
-	if( typeof data === undefined ){
+	if( typeof data === 'undefined' ){
 		return true;
 	}
 	return false;
