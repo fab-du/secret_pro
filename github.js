@@ -6,18 +6,18 @@ var utils      = require('./utils.js');
 
 github.authenticate({
 	    type: "oauth",
-	    token: "6612a4e2dfcc6650643a612eecc00ba3162432ee"
+	    token: "8e11138180d21f4fc8a8618838101613bdad3e41"
 });
 
 function Github(){}
 
-Github.prototype.search_by_city = function search_by_city( city ){
-return new Promise((resolve )=>{
+Github.prototype.search_by_city = function search_by_city( city, cb ){
 	let _q = "location:" + city;
 	github.search.users({
 		q: _q
 	}, function(err, res){
-		utils.check_cb_error( err, "Github API Issue" );
+		console.log(res)
+		utils.check_cb_error( err, res);
 
 		try {
 		   var _users = res['items'];
@@ -25,13 +25,13 @@ return new Promise((resolve )=>{
 			   return user["login"];
 		   });
 		  sort_event.emit("max", usernames.length);
-		  resolve(usernames);
+		  cb(null, usernames);
 			
 		} catch (e) {
-			utils.error( e.toString() );
+			cb(true, []);
 		}
 	   });
-});
+
 };
 
 
@@ -41,13 +41,16 @@ function get_user_repos ( username, cb ){
 		q: _q
 	}, 
 	function(err, res){
-	   utils.check_cb_error( err, "Github API Issue." );
+	   console.log(res)
+	   utils.check_cb_error(err, res);
 
 	   try {
 		   var repos = res['items'];
-		   cb(repos);
+		   //first arg err=false or err=null
+		   cb(null, repos);
 	   } catch (e) {
-		   cb([]);
+	   		//first arg err=false or err=null
+	   	   cb(true, [] );
 	   }
 	});
 
@@ -56,9 +59,11 @@ function get_user_repos ( username, cb ){
 Github.prototype.get_stars = function get_stars( usernames ){
 
 	usernames.map((username)=>{
-		get_user_repos( username, function(repos){
+		get_user_repos( username, function(err, repos){
+		if( !err && repos.length > 0 ){
 			var user_stars = count_stars( repos, username );
 			sort_event.emit("event",  user_stars);
+		}
 		});
 	});
 };

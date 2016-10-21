@@ -21,7 +21,7 @@ error : function error( error_message ){
 
 check_cb_error : function check_cb_error( err, error_message ){
 	if(err){
-		errorHandler.emit("\n error", error_message + "\n" + err.message.message );
+		errorHandler.emit("githuberror", error_message.toString() );
 	}
 },
 
