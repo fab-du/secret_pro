@@ -6,7 +6,7 @@ var utils      = require('./utils.js');
 
 github.authenticate({
 	    type: "oauth",
-	    token: "d3fb84c3412f2a20f8ef33a58fc11019e7164305"
+	    token: "5b157d20d6e3c4e32062573381ad6d03a7f85367"
 });
 
 function Github(){}
@@ -19,7 +19,9 @@ return new Promise((resolve )=>{
 	}, function(err, res){
 		utils.check_cb_error( err, "Github API Issue" );
 
-		if( utils.check_cb_undefined( res )){
+		console.log( err )
+		console.log( typeof res )
+		if( utils.check_cb_undefined( res ) ){
 			utils.error("No Users In the City. \n" );
 		}
 

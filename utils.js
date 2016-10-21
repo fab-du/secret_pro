@@ -26,10 +26,10 @@ check_cb_error : function check_cb_error( err, error_message ){
 },
 
 check_cb_undefined: function check_cb_undefined( data ){
-	if( typeof data === 'undefined' ){
-		return true;
+	if( typeof data != 'undefined' && data ){
+		return false;
 	}
-	return false;
+	return true;
 }
 
 };
