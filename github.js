@@ -6,7 +6,7 @@ var utils      = require('./utils.js');
 
 github.authenticate({
 	    type: "oauth",
-	    token: "1d1613afad552d21b896f25fae75784c19ab13b5"
+	    token: "6612a4e2dfcc6650643a612eecc00ba3162432ee"
 });
 
 function Github(){}
